@@ -102,7 +102,7 @@ def main():
         logger.info('Starting polling')
         updater.start_polling()
     else:
-        logger.info('Starting webhook')
+        logger.info(f"Starting webhook on PORT {PORT}")
         updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
         updater.bot.setWebhook(f"https://voetbot.herokuapp.com/{TOKEN}")
 
