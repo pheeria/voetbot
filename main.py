@@ -49,11 +49,12 @@ def country_selected(update: Update, context: CallbackContext) -> int:
     logger.info(f"country selected: {update.callback_query.data}")
 
     query = update.callback_query
-    query.answer()
 
     games, teams = find_teams_per_country(query.data)
     context.user_data['games'] = games
     
+    query.answer()
+
     keyboard = []
     for team in teams:
         keyboard.append(InlineKeyboardButton(team, callback_data=team))
@@ -67,14 +68,15 @@ def team_selected(update: Update, context: CallbackContext) -> int:
     logger.info(f"team selected: {update.callback_query.data}")
 
     query = update.callback_query
-    query.answer()
 
     games = find_games_per_team(context.user_data['games'], query.data)
     apis = prepare_api_links(games)
     videos = prepare_youtube_videos(apis)
+
+    query.answer()
     
     for video in videos:
-        query.edit_message_text(video)
+        context.bot.send_message(video)
 
     return ConversationHandler.END
 
