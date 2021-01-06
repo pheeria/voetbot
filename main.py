@@ -36,13 +36,13 @@ TOKEN = os.environ.get('TOKEN', '')
 
 def start(update: Update, _: CallbackContext) -> int:
     logger.info(f"started for {update.message.from_user['username']}")
+
     keyboard = []
     for country in COUNTRIES:
         keyboard.append(InlineKeyboardButton(country, callback_data=country))
-
     reply_markup = InlineKeyboardMarkup([keyboard])
-    update.message.reply_text('Country?', reply_markup=reply_markup)
 
+    update.message.reply_text('Country?', reply_markup=reply_markup)
     return COUNTRY
 
 
@@ -56,13 +56,13 @@ def country_selected(update: Update, context: CallbackContext) -> int:
     context.user_data['games'] = games
     
     keyboard = []
-    
     for team in teams:
         keyboard.append(InlineKeyboardButton(team, callback_data=team))
     reply_markup = InlineKeyboardMarkup.from_column(keyboard)
-    query.edit_message_text('Team?', reply_markup=reply_markup)
 
+    query.edit_message_text('Team?', reply_markup=reply_markup)
     return TEAM
+
 
 def team_selected(update: Update, context: CallbackContext) -> int:
     logger.info(f"team selected: {update.callback_query.data}")
@@ -79,8 +79,10 @@ def team_selected(update: Update, context: CallbackContext) -> int:
 
     return ConversationHandler.END
 
+
 def help_command(update: Update, _: CallbackContext) -> None:
     update.message.reply_text('Use /start to test this bot.')
+
 
 def main():
     updater = Updater(TOKEN)
@@ -88,16 +90,10 @@ def main():
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
-            COUNTRY: [
-                CallbackQueryHandler(country_selected)
-            ],
-            TEAM: [
-                CallbackQueryHandler(team_selected)
-            ],
+            COUNTRY: [CallbackQueryHandler(country_selected)],
+            TEAM: [CallbackQueryHandler(team_selected)],
         },
-        fallbacks=[
-            MessageHandler(Filters.text, help_command)
-        ],
+        fallbacks=[MessageHandler(Filters.text, help_command)],
     )
 
     updater.dispatcher.add_handler(conv_handler)
