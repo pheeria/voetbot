@@ -75,8 +75,7 @@ def team_selected(update: Update, context: CallbackContext) -> int:
 
     query.answer()
     
-    for video in videos:
-        context.bot.send_message(video)
+    query.edit_message_text("\n".join(videos))
 
     return ConversationHandler.END
 
