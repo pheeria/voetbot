@@ -99,11 +99,11 @@ def main():
     updater.dispatcher.add_handler(conv_handler)
 
     if ENV == 'stg':
+        logger.info('Starting polling')
         updater.start_polling()
     else:
-        updater.start_webhook(listen="0.0.0.0",
-              port=PORT,
-              url_path=TOKEN)
+        logger.info('Starting webhook')
+        updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
         updater.bot.setWebhook(f"https://voetbot.herokuapp.com/{TOKEN}")
 
     updater.idle()
