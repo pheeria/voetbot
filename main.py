@@ -30,7 +30,6 @@ COUNTRIES = [
     'ENGLAND'
 ]
 
-ENV = os.environ.get('ENV', 'stg')
 PORT = int(os.environ.get('PORT', '8443'))
 TOKEN = os.environ.get('TOKEN', '')
 
@@ -98,13 +97,9 @@ def main():
 
     updater.dispatcher.add_handler(conv_handler)
 
-    if ENV == 'stg':
-        logger.info('Starting polling')
-        updater.start_polling()
-    else:
-        logger.info(f"Starting webhook on PORT {PORT}")
-        updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
-        updater.bot.setWebhook(f"https://voetbot.herokuapp.com/{TOKEN}")
+    logger.info(f"Starting webhook on PORT {PORT}")
+    updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
+    updater.bot.setWebhook(f"https://voetbot.herokuapp.com/{TOKEN}")
 
     updater.idle()
 
