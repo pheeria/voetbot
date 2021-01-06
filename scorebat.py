@@ -9,14 +9,15 @@ COUNTRIES = [
     'ENGLAND'
 ]
 
-def find_teams_per_country(games, country):
+def find_teams_per_country(country):
+    games = requests.get(API + '/video-api/v1').json()
     result = set()
     for game in games:
         competition = game['competition']['name']
         if country in competition:
             result.add(game['side1']['name'])
             result.add(game['side2']['name'])
-    return sorted(result)
+    return games, sorted(result)
 
 def find_games_per_team(games, team):
     return [g for g in games if team in g['title']]
